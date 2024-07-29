@@ -1,0 +1,7 @@
+user: postgres
+dbname: messaggio
+sslmode: disable
+password: postgres
+host: localhost
+port: 8000
+secret: secret 
