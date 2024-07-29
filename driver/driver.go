@@ -11,7 +11,7 @@ type DB interface {
 	Get(cnf *config.Config) (*sql.DB, error)
 }
 
-func Get(config *config.Config) (*sql.DB, error) {
+func GetDB(config *config.Config) (*sql.DB, error) {
 	db, err := sql.Open("postgres", fmt.Sprintf("user=%s dbname=%s sslmode=%s password=%s host=%s",
 		config.User, config.DBname, config.Sslmode, config.Password, config.Host))
 	if err != nil {
