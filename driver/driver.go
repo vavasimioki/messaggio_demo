@@ -25,6 +25,7 @@ func GetDB(config *config.Config) (*sql.DB, error) {
 	_, err = db.Exec(`
 	  	CREATE TABLE IF NOT EXISTS users (
 			id SERIAL PRIMARY KEY,
+			name TEXT NOT NULL,
 			text TEXT NOT NULL,
 			processed BOOLEAN DEFAULT false
 			

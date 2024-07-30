@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"io/ioutil"
 	"log"
 	"messaggio_demo/config"
@@ -96,6 +97,21 @@ func LoadConfig() (*config.Config, error) {
 }
 
 func MessageHandler(w http.ResponseWriter, r *http.Request) {
+	var message Message
+
+	if err := json.NewDecoder(r.Body).Decode(&message); err != nil {
+		http.Error(w, "error decoding", http.StatusBadRequest)
+	}
+	CheckMessage(message)
+
+}
+func (db *db) CheckMessage(msg Message) bool {
+	row := db.QueryRow("select * from users where text=$2", msg.Name)
+	err := row.Scan(&msg.ID, &msg.Name, &msg.Value)
+	if err != nil {
+		return false
+	}
+
 }
 
 func main() {
@@ -110,7 +126,7 @@ func main() {
 	}
 
 	r := mux.NewRouter()
-	r.HandleFunc("/messages", MessageHandler().Methods("GET"))
+	r.HandleFunc("/messages", MessageHandler).Methods("POST")
 	log.Println("Server starting on: 8000")
 	log.Fatal(http.ListenAndServe(":8000", r))
 }
