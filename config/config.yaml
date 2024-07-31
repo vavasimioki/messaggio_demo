@@ -1,7 +1,13 @@
-user: postgres
-dbname: messaggio
-sslmode: disable
-password: postgres
-host: localhost
-port: 8000
-secret: secret 
+
+postgres:
+  user: postgres
+  dbname: messaggio
+  sslmode: disable
+  password: postgres
+  host: postgres 
+  port: 5432
+
+
+kafka:
+  brokers:
+    - kafka:29092 

@@ -5,13 +5,13 @@ import (
 	"fmt"
 	"log"
 	"messaggio_demo/config"
+
+	_ "github.com/lib/pq" // Убедитесь, что драйвер PostgreSQL подключен
 )
 
-type DB interface {
-	Get(cnf *config.Config) (*sql.DB, error)
-}
-
 func GetDB(config *config.Config) (*sql.DB, error) {
+	fmt.Printf("user=%s dbname=%s sslmode=%s password=%s host=%s",
+		config.User, config.DBname, config.Sslmode, config.Password, config.Host)
 	db, err := sql.Open("postgres", fmt.Sprintf("user=%s dbname=%s sslmode=%s password=%s host=%s",
 		config.User, config.DBname, config.Sslmode, config.Password, config.Host))
 	if err != nil {
@@ -23,17 +23,13 @@ func GetDB(config *config.Config) (*sql.DB, error) {
 	}
 
 	_, err = db.Exec(`
-	  	CREATE TABLE IF NOT EXISTS users (
-			id SERIAL PRIMARY KEY,
-			name TEXT NOT NULL,
-			text TEXT NOT NULL,
-			processed BOOLEAN DEFAULT false
-			
-		)
-	`)
-
+        CREATE TABLE IF NOT EXISTS users (
+            id SERIAL PRIMARY KEY,
+            text TEXT NOT NULL
+        )
+    `)
 	if err != nil {
-		return nil, fmt.Errorf("error creating users table")
+		return nil, fmt.Errorf("error creating users table: %v", err)
 	}
 
 	fmt.Println("Users table created")
