@@ -4,3 +4,8 @@
 - Use PostgreSQL for message storage
 - Implement sending and reading messages in Kafka
 - Provide the ability to run the project in Docker
+
+# usage
+- docker-compose up
+- cd messaggio_demo
+- go run .
